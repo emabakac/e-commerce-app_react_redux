@@ -1,17 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { combineReducers, createStore, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
+import { App } from "./modules";
+import cartReducer from "./modules/cart/redux/reducer";
+import favoritesReducer from "./modules/favorites/redux/reducer";
+import productsReducer from "./modules/products/redux/reducer";
+
+const rootReducer = combineReducers({
+  cart: cartReducer,
+  favorites: favoritesReducer,
+  products: productsReducer,
+});
+
+const composedEnhancer = compose(applyMiddleware(thunk));
+
+const store = createStore(rootReducer, composedEnhancer);
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </Provider>,
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
